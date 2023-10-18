@@ -1,6 +1,6 @@
 {
-	"appId": "com.example.app",
-	"productName": "Sveltekit Electron",
+	"appId": "com.cnpjdados.app",
+	"productName": "CNPJ Dados",
 	"directories": {
 		"output": "dist"
 	},

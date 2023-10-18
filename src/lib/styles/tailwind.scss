@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	input[type='time']::-webkit-calendar-picker-indicator {
+		background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAQAAAAnOwc2AAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAACYktHRAD/h4/MvwAAAAd0SU1FB+cKBhYAMngySKUAAABQSURBVAjXdc4xDoAgEAXRL4XZi+5NOAPX2o6jQLAZC2MiilO+aoQwnGAwCBxDwsg07hoZE/6gi10E72JjaNfckbQoqX6sJhX1ibrKz9Ji/gQkMWyk730OJwAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyMy0xMC0wNlQyMjowMDo0NiswMDowMGW60zYAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjMtMTAtMDZUMjI6MDA6NDYrMDA6MDAU52uKAAAAKHRFWHRkYXRlOnRpbWVzdGFtcAAyMDIzLTEwLTA2VDIyOjAwOjUwKzAwOjAw7Ih/8QAAAABJRU5ErkJggg==');
+		background-size: 5px 5px;
+		background-position: 50% 50%;
+	}
+}
+
+@layer components {
+	.toggle {
+		input {
+			&:checked {
+				background-color: currentColor !important;
+			}
+			& ~ span {
+				@apply mr-0;
+			}
+		}
+	}
+	.chevron-down {
+		@apply w-2.5 h-2.5;
+		background-image: url("data:image/svg+xml,%3csvg aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 10 6'%3e %3cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m1 1 4 4 4-4'/%3e %3c/svg%3e");
+		background-position: 50% 50%;
+		background-repeat: no-repeat;
+	}
+}
