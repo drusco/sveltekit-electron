@@ -38,8 +38,8 @@ try {
 
 		const mainWindow = new BrowserWindow({
 			backgroundColor: 'whitesmoke',
-			titleBarStyle: 'hidden',
-			autoHideMenuBar: true,
+			titleBarStyle: 'default',
+			autoHideMenuBar: false,
 			trafficLightPosition: {
 				x: 17,
 				y: 32,

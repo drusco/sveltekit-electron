@@ -837,7 +837,7 @@
 					<div>Pesquisa avançada</div>
 				</div>
 			</div>
-			<div class="h-full flex flex-col p-5 space-y-4 overflow-auto">
+			<div class="h-full flex flex-col p-5 space-y-4 overflow-auto relative">
 				<div class="grid grid-cols sm:grid-cols-2 lg:grid-cols-4 gap-4">
 					<div>
 						<Label for="razao-social" class="flex items-center mb-2">
