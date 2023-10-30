@@ -45,6 +45,7 @@
 
 	let settingsLoaded = false;
 	let searchInProgress = false;
+	let saveInProgress = false;
 	let searchProgressValue = '0';
 	let downloadPath: string;
 
@@ -528,6 +529,16 @@
 		return await response.json();
 	};
 
+	const searchByCNPJ = async (CNPJ: string = '') => {
+		const response = await fetch(`${HOST}/v2/public/cnpj/${CNPJ}`, {
+			method: 'GET',
+			headers: {
+				['Content-Type']: 'application/json',
+			},
+		});
+		return await response.json();
+	};
+
 	function* arrayToChunks(arr: any[], n: number) {
 		for (let i = 0; i < arr.length; i += n) {
 			yield arr.slice(i, i + n);
@@ -549,6 +560,7 @@
 
 		results = data.cnpj;
 
+		const totalItems = limit || data.count;
 		const itemsPerPage = data.cnpj.length;
 		const pages = Math.ceil(data.count / itemsPerPage);
 		const limitedPages = Math.ceil(limit / itemsPerPage);
@@ -557,6 +569,33 @@
 		const chunkSize = 50;
 		const arrayOfPages = Array.from({ length: totalPages }, (_, i) => i + (currentPage + 1));
 		const chunkOfPages: Generator<number[]> = arrayToChunks(arrayOfPages, chunkSize);
+
+		const addExtraData = async (results: any[]) => {
+			const dataPromises = results.map(async (empresa) => {
+				const res = await searchByCNPJ(empresa.cnpj).catch(console.log);
+				if (res.status === 'ok') {
+					const data = res.cnpj;
+					empresa.telefones = data.telefones?.join(', ') || '';
+					empresa.email = data.email;
+				} else {
+					empresa.telefones = '';
+					empresa.email = '';
+				}
+			});
+			await Promise.allSettled(dataPromises);
+		};
+
+		const beforeFile = async () => {
+			let index = 0;
+			saveInProgress = true;
+			const resultChunks = arrayToChunks(results, chunkSize);
+			for (let chunk of resultChunks) {
+				index++;
+				await addExtraData(chunk);
+				searchProgressValue = ((index * chunkSize * 100) / totalItems).toFixed(1);
+			}
+			saveInProgress = false;
+		};
 
 		const doSearch = async () => {
 			console.log('searching...');
@@ -584,6 +623,7 @@
 			if (state.done) {
 				console.log('search ends here');
 				if (limit) results.splice(limit);
+				await beforeFile();
 				await window.electron.invoke('empresas', results);
 				setTimeout(() => {
 					searchInProgress = false;
@@ -1167,7 +1207,7 @@
 				{#if searchInProgress}
 					<div class="w-full space-y-2">
 						<div class="text-sm flex items-center space-x-3 justify-between">
-							<div>Salvando...</div>
+							<div>{saveInProgress ? 'Salvando' : 'Pesquisando'}...</div>
 							<div>{searchProgressValue}%</div>
 						</div>
 						<Progressbar

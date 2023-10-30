@@ -149,6 +149,8 @@ try {
 					uf,
 					atividade_principal,
 					cnpj_mei,
+					telefones,
+					email,
 				}) => {
 					return {
 						CNPJ: cnpj,
@@ -165,6 +167,8 @@ try {
 						uf,
 						atividade_principal: `${atividade_principal.codigo} - ${atividade_principal.descricao}`,
 						cnpj_mei: cnpj_mei === true ? 'sim' : 'não',
+						telefones,
+						email
 					};
 				},
 			),
