@@ -553,15 +553,18 @@
 			alert(err.message),
 		);
 
-		if (!success) {
+		results = data.cnpj || [];
+		const hasResults = results.length;
+
+		if (!success || !hasResults) {
 			searchInProgress = false;
-			return alert(message);
+			if (message) alert(message);
+			else if (!hasResults) alert('Nenhum resultado encontrado');
+			return;
 		}
 
-		results = data.cnpj;
-
 		const totalItems = limit || data.count;
-		const itemsPerPage = data.cnpj.length;
+		const itemsPerPage = results.length || 1;
 		const pages = Math.ceil(data.count / itemsPerPage);
 		const limitedPages = Math.ceil(limit / itemsPerPage);
 		const totalPages = limit > 0 ? limitedPages : pages;
